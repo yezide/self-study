@@ -45,6 +45,7 @@ public class ThreadGroup {
                     public void failed(Throwable exc, ByteBuffer attachment) {
                         exc.printStackTrace();
                         cdl.countDown();
+
                     }
                 });
             }
