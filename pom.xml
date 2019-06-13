@@ -8,6 +8,7 @@
         <module>classloader</module>
         <module>algorithms</module>
         <module>designpattern</module>
+        <module>aqs</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
