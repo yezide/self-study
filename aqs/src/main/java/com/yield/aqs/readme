@@ -1,2 +1,44 @@
 AQS -- AbstractQueuedSynchronizer
-import java.util.concurrent.locks.AbstractQueuedSynchronizer;
+
+关键字:
+    ReentrantLock
+    Semaphore
+    CountDownLatch
+
+    volatile
+        可见性:线程A更新了某一个值，会与其他线程之间的同步更新
+            java内存分为主内存(堆)、工作内存(栈)。主内存是所有线程共享的区域，工作内存之间不共享。工作内存中保存的是主内存中变量的拷贝，线程对变量的操作都在工作内存中进行然后赋值给主内存。
+        有序性:防止指令重排(jvm对象初始化过程)
+
+    synchronized
+        原子性
+        可见性
+        有序性
+
+    CAS
+        compareAndSwap:比较和交换
+            现代的cpu内部默认支持了cas的原子性，所以cas是不需要访问系统内核状态的轻量级锁
+
+锁具体是锁什么?
+    锁对象头，在对象头的mark word位记录着对象的锁状态。
+
+java1.6之后 synchronized优化
+    锁升级机制
+        偏移锁:标识(1位 此状态1 && 锁标识01时，表示可偏向状态。), 只有一个线程，没有其他线程争抢资源的情况下进一步的性能提高。
+        锁标识(2位),4钟状态
+            00:locked 轻量级锁是竞争资源的线程不多、资源持有者的时间不长时，采用的一种解决方案。
+                其内部是为了避免线程之间通信大量耗费性能(用户态和内核态上下文切换),所以直接让竞争线程进入自旋，等待锁释放。自旋过程中抢到锁资源的线程会通过cas把对象头替换到栈顶，让lock record的指针指向对象头。
+            01:unlocked
+            10:monitor 重量级锁 在轻量级锁的过程中，多个线程同时竞争锁，并且自旋一段时间后，还是无法获取锁，竞争锁的线程会进入内核态，这时轻量级锁就会膨胀为重量级锁。
+            11:marked
+
+尝试自己实现一把锁
+    1.继承Lock，重写lock 和 unLock方法
+    2.内部类实现获取锁的方法，实现AbstractQueuedSynchronizer，实现tryAcquire、tryRelease、isHeldExclusively(排他锁持有者)方法
+        tryAcquire:使用compareAndSetState获取锁，获取成功设置当前线程为排它锁拥有者
+        tryRelease:判断当前线程是否是持有者，如果不是抛出IllegalMonitorStateException，如果是设置持有者为null、status为0
+        isHeldExclusively:获取排它锁持有者和当前线程比较
+    3.lock实现对应tryAcquire、unLock实现对应tryRelease
+        template method pattern(模板方法模式)
+        acquire会调用tryAcquire
+        release会调用tryRelease

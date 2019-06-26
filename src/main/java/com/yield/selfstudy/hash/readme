@@ -1,0 +1,24 @@
+关键字
+哈希表数据结构
+hashcode
+equals
+HashMap
+HashSet
+
+HashSet和HashMap。
+内部都是哈希表数据结构存储
+HashSet存放单个元素，元素不可重复，实现了Set接口，用整个对象计算hashCode
+HashMap以key:value形式存储，key不可重复，实现了Map接口，用key计算hashCode
+    建议key对象遵守重写equals和hashCode方法的规则，因为在内部实现，是先hashCode计算取模后定位下标值，再equals比较key是否相等来定位。
+
+1.hash是java中的一种数据结构
+2.实现原理
+    内部实现是一个数组
+    数组内每个元素是一个链表Map.Entry<K, V> or Node,key和value数据实际是存在entry内
+    通过hashCode计算的hash值对数据长度取模来定位下标
+    当多个key计算hashCode取模后的值相同时，会以链表形式存储解决'碰撞'问题
+    取数据时也是通过key计算hashCode值取模，然后对下标的链表节点进行遍历，然后使用equals比较key值来定位
+    当达到负债因子上线时(0.75，也就是数组总容量的75%)，将会进行rehashing，创建原大小2倍的数组，并将原来的数据进行重新hashCode取模后放入新的数组中
+    因hashMap是线程不安全的，当多线程去rehashing的时候，会有问题。多线程情况下应该使用ConcurrentHashMap。其内部实现就是在HashMap的基础上在局部的写代码块中加上了synchronized
+
+
