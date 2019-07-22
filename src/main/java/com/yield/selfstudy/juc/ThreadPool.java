@@ -56,6 +56,7 @@ public class ThreadPool {
 
         try {
             long start = System.currentTimeMillis();
+            // invokeAll 和 execute、submit最大的区别 在于invokeAll中如果任务没有正常执行完，会对线程池所有的线程进行打断。
             List<Future<Integer>> results = threadPool.invokeAll(tasks, 1, TimeUnit.MINUTES);
             System.out.println("timer:" + (System.currentTimeMillis() - start));
         } catch (InterruptedException e) {
