@@ -65,6 +65,8 @@ package com.yield.selfstudy;
  */
 public class Hello {
 
+    private long i;
+
     public static void main(String[] args) {
         System.out.println("Hello");
     }
